@@ -15,6 +15,7 @@ class TANKPROJECT_API ATankPawn : public APawn
 public:
 	ATankPawn();
 	void MoveForward(float value);
+	void RotateRight(float value);
 	void Tick(float DeltaSeconds) override;
 
 protected:
@@ -39,4 +40,5 @@ protected:
 	float Test = 1.0f;
 
 	float TargetForwardAxisValue = 0.0f;
+	float TargetRotateAxisValue = 0.0f;
 };

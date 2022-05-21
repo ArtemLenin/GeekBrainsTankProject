@@ -14,6 +14,7 @@ void ATankController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	InputComponent->BindAxis("MoveForward", this, &ATankController::MoveForward);
+	InputComponent->BindAxis("Rotate", this, &ATankController::RotateRight);
 }
 
 void ATankController::BeginPlay()
@@ -26,4 +27,9 @@ void ATankController::BeginPlay()
 void ATankController::MoveForward(float value)
 {
 	TankPawn->MoveForward(value);
+}
+
+void ATankController::RotateRight(float value)
+{
+	TankPawn->RotateRight(value);
 }

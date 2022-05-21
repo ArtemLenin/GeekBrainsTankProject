@@ -24,4 +24,5 @@ protected:
 	class ATankPawn* TankPawn;
 
 	void MoveForward(float value);
+	void RotateRight(float value);
 };
