@@ -17,12 +17,17 @@ public:
 	ATankController();
 
 	virtual void SetupInputComponent() override;
-	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+	FVector GetMousePosition() { return MousePosition; };
 
 protected:
 	UPROPERTY()
 	class ATankPawn* TankPawn;
 
+	UPROPERTY()
+	FVector MousePosition;
+
+	virtual void BeginPlay() override;
 	void MoveForward(float value);
 	void RotateRight(float value);
 };

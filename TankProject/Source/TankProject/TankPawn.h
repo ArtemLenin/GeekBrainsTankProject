@@ -14,8 +14,11 @@ class TANKPROJECT_API ATankPawn : public APawn
 
 public:
 	ATankPawn();
+	UFUNCTION()
 	void MoveForward(float value);
+	UFUNCTION()
 	void RotateRight(float value);
+	virtual void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
 
 protected:
@@ -37,8 +40,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Rotation");
 	float RotationSpeed = 10.0f;
 
-	float Test = 1.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Rotation");
+	float RotationInterpolationKey = 0.1f;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Rotation");
+	float TurretRotationInterpolationKey = 0.5f;
 
 	float TargetForwardAxisValue = 0.0f;
-	float TargetRotateAxisValue = 0.0f;
+	float TargetRightAxisValue = 0.0f;
+	float CurrentRightAxisValue;
+
+	class ATankController* Controller;
 };
