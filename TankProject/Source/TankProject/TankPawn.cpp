@@ -3,10 +3,12 @@
 
 #include "TankPawn.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/ArrowComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include <Camera/CameraComponent.h>
 #include "GameFramework/Actor.h"
 #include "TankController.h"
+#include "Cannon.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -27,6 +29,9 @@ ATankPawn::ATankPawn()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CannonSetupPoint"));
+	CannonSetupPoint->AttachToComponent(TurretMesh, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void ATankPawn::MoveForward(float value)
@@ -44,6 +49,7 @@ void ATankPawn::BeginPlay()
 	Super::BeginPlay();
 
 	Controller = Cast<ATankController>(GetController());
+	SetupCannon();
 }
 
 void ATankPawn::Tick(float DeltaSeconds)
@@ -77,4 +83,36 @@ void ATankPawn::Tick(float DeltaSeconds)
 
 		TurretMesh->SetWorldRotation(FMath::Lerp(currRotation, targetRotation, TurretRotationInterpolationKey));
 	}
+}
+
+void ATankPawn::Fire()
+{
+	if (Cannon && ProjectilesCount > 0)
+	{
+		Cannon->Fire();
+		ProjectilesCount--;
+	}
+}
+
+void ATankPawn::SpecialFire()
+{
+	if (Cannon && SpecialProjectilesCount > 0)
+	{
+		Cannon->SpecialFire();
+		SpecialProjectilesCount--;
+	}
+}
+
+void ATankPawn::SetupCannon()
+{
+	if (Cannon)
+	{
+		Cannon->Destroy();
+	}
+	FActorSpawnParameters spawnParams;
+	spawnParams.Instigator = this;
+	spawnParams.Owner = this;
+
+	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, spawnParams);
+	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }

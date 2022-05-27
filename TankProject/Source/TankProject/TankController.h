@@ -30,4 +30,6 @@ protected:
 	virtual void BeginPlay() override;
 	void MoveForward(float value);
 	void RotateRight(float value);
+	void Fire();
+	void SpecialFire();
 };

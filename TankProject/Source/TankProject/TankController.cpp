@@ -16,6 +16,9 @@ void ATankController::SetupInputComponent()
 
 	InputComponent->BindAxis("MoveForward", this, &ATankController::MoveForward);
 	InputComponent->BindAxis("RotateRight", this, &ATankController::RotateRight);
+	InputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ATankController::Fire);
+	InputComponent->BindAction("SpecialFire", EInputEvent::IE_Pressed, this, &ATankController::SpecialFire);
+
 }
 
 void ATankController::BeginPlay()
@@ -49,4 +52,14 @@ void ATankController::MoveForward(float value)
 void ATankController::RotateRight(float value)
 {
 	TankPawn->RotateRight(value);
+}
+
+void ATankController::Fire()
+{
+	TankPawn->Fire();
+}
+
+void ATankController::SpecialFire()
+{
+	TankPawn->SpecialFire();
 }
