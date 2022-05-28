@@ -55,8 +55,7 @@ protected:
 	float TargetRightAxisValue = 0.0f;
 	float CurrentRightAxisValue;
 
-	int ProjectilesCount = 5;
-	int SpecialProjectilesCount = 3;
+	
 
 	class ATankController* Controller;
 
@@ -71,4 +70,6 @@ protected:
 	ACannon* Cannon;
 
 	void SetupCannon();
+	
+	
 };

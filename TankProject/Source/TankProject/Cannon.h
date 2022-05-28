@@ -43,5 +43,6 @@ protected:
 
 	bool bReadyToFire = true;
 
-
+	int ProjectilesCount = 5;
+	int SpecialProjectilesCount = 3;
 };

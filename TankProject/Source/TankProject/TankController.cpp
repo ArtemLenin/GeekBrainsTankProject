@@ -42,6 +42,11 @@ void ATankController::Tick(float DeltaSeconds)
 
 	MousePosition = PawnPosition + dir * 1000;
 	DrawDebugLine(GetWorld(), PawnPosition, MousePosition, FColor::Green, false, 0.1f, 0, 5);
+
+	if (bIsShooting)
+	{
+		TankPawn->Fire();
+	}
 }
 
 void ATankController::MoveForward(float value)
@@ -56,10 +61,19 @@ void ATankController::RotateRight(float value)
 
 void ATankController::Fire()
 {
-	TankPawn->Fire();
+	if (!bIsShooting)
+	{
+		bIsShooting = true;
+		GetWorld()->GetTimerManager().SetTimer(ShootingTimer, this, &ATankController::StopShoot, 3, false);
+	}
 }
 
 void ATankController::SpecialFire()
 {
 	TankPawn->SpecialFire();
+}
+
+void ATankController::StopShoot()
+{
+	bIsShooting = false;
 }

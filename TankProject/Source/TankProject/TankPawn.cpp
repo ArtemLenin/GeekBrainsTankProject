@@ -87,19 +87,17 @@ void ATankPawn::Tick(float DeltaSeconds)
 
 void ATankPawn::Fire()
 {
-	if (Cannon && ProjectilesCount > 0)
+	if (Cannon)
 	{
 		Cannon->Fire();
-		ProjectilesCount--;
 	}
 }
 
 void ATankPawn::SpecialFire()
 {
-	if (Cannon && SpecialProjectilesCount > 0)
+	if (Cannon)
 	{
 		Cannon->SpecialFire();
-		SpecialProjectilesCount--;
 	}
 }
 
@@ -116,3 +114,5 @@ void ATankPawn::SetupCannon()
 	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, spawnParams);
 	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
+
+

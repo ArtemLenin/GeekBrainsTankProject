@@ -26,6 +26,7 @@ ACannon::ACannon()
 void ACannon::Fire()
 {
 	if (!IsReadyToFire()) return;
+	if (ProjectilesCount <= 0) return;
 
 	bReadyToFire = false;
 
@@ -37,6 +38,7 @@ void ACannon::Fire()
 	{
 		GEngine->AddOnScreenDebugMessage(10, 2, FColor::Red, "Fire - Trace");
 	}
+	ProjectilesCount--;
 
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACannon::Reload, 1 / FireRate, false);
 }
@@ -44,7 +46,7 @@ void ACannon::Fire()
 void ACannon::SpecialFire()
 {
 	if (!IsReadyToFire()) return;
-
+	if (SpecialProjectilesCount <= 0) return;
 	bReadyToFire = false;
 
 	if (CannonType == ECannonType::FireProjectile)
@@ -55,6 +57,7 @@ void ACannon::SpecialFire()
 	{
 		GEngine->AddOnScreenDebugMessage(10, 2, FColor::Red, "SpecialFire - Trace");
 	}
+	SpecialProjectilesCount--;
 
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACannon::Reload, 5 / FireRate, false);
 }

@@ -32,4 +32,9 @@ protected:
 	void RotateRight(float value);
 	void Fire();
 	void SpecialFire();
+
+	void StopShoot();
+	bool bIsShooting = false;
+	FTimerHandle ShootingTimer;
+
 };
