@@ -19,8 +19,10 @@ public:
 	void SpecialFire();
 	bool IsReadyToFire();
 	void Reload();
-
+	void Burst();
+	
 	FTimerHandle ReloadTimer;
+	FTimerHandle BurstTimer;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
@@ -45,4 +47,7 @@ protected:
 
 	int ProjectilesCount = 5;
 	int SpecialProjectilesCount = 3;
+
+	int BurstCount = 3;
+	int CurrentBurst = 0;
 };
