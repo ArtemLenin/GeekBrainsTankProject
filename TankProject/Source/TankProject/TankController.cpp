@@ -34,8 +34,9 @@ void ATankController::Tick(float DeltaSeconds)
 
 	FVector mouseDirection;
 	DeprojectMousePositionToWorld(MousePosition, mouseDirection);
-
-	FVector PawnPosition = TankPawn->GetActorLocation();
+	FVector PawnPosition;
+	if(TankPawn) PawnPosition = TankPawn->GetActorLocation();
+	//FVector TurretPosition = TankPawn->TurretMesh->GetComponentLocation();
 	MousePosition.Z = PawnPosition.Z;
 	FVector dir = MousePosition - PawnPosition;
 	dir.Normalize();
@@ -46,16 +47,19 @@ void ATankController::Tick(float DeltaSeconds)
 
 void ATankController::MoveForward(float value)
 {
+	if (TankPawn)
 	TankPawn->MoveForward(value);
 }
 
 void ATankController::RotateRight(float value)
 {
+	if (TankPawn)
 	TankPawn->RotateRight(value);
 }
 
 void ATankController::Fire()
 {
+	if (TankPawn)
 	TankPawn->Fire();
 }
 

@@ -5,6 +5,8 @@
 #include "Components/ArrowComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "DrawDebugHelpers.h"
+#include "Projectile.h"
 
 
 
@@ -14,11 +16,11 @@ ACannon::ACannon()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	USceneComponent* sceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
-	sceneComponent = RootComponent;
+	USceneComponent* sceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = sceneComponent;
 
 	CannonMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CannonMesh"));
-	CannonMesh->SetupAttachment(sceneComponent);
+	CannonMesh->SetupAttachment(RootComponent);
 
 	ProjectTileSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("SpawnPoint"));
 	ProjectTileSpawnPoint->SetupAttachment(CannonMesh);
@@ -31,14 +33,8 @@ void ACannon::Fire()
 
 	bReadyToFire = false;
 
-	if (CannonType == ECannonType::FireProjectile)
-	{
-		GEngine->AddOnScreenDebugMessage(10, 2, FColor::Green, "Fire - Projectile");
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(10, 2, FColor::Red, "Fire - Trace");
-	}
+	Shoot();
+
 	ProjectilesCount--;
 
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACannon::Reload, 1 / FireRate, false);
@@ -69,14 +65,7 @@ void ACannon::Burst()
 	CurrentBurst += 1;
 	if (CurrentBurst <= BurstCount)
 	{
-		if (CannonType == ECannonType::FireProjectile)
-		{
-			GEngine->AddOnScreenDebugMessage(INDEX_NONE, 2, FColor::MakeRandomColor(), "SpecialFire - Projectile", true);
-		}
-		else
-		{
-			GEngine->AddOnScreenDebugMessage(10, 2, FColor::Red, "SpecialFire - Trace");
-		}
+		Shoot();
 	}
 	else
 	{
@@ -84,5 +73,48 @@ void ACannon::Burst()
 		SpecialProjectilesCount--;
 
 		GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &ACannon::Reload, 5 / FireRate, false);
+	}
+}
+
+void ACannon::Shoot()
+{
+	if (CannonType == ECannonType::FireProjectile)
+	{
+		GEngine->AddOnScreenDebugMessage(10, 2, FColor::Green, "Fire - Projectile");
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectTileSpawnPoint->GetComponentLocation(), ProjectTileSpawnPoint->GetComponentRotation());
+		if (projectile)
+		{
+			projectile->Start();
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(10, 2, FColor::Red, "Fire - Trace");
+		LineTrace();
+	}
+}
+
+void ACannon::LineTrace()
+{
+	FHitResult hitResult;
+	FCollisionQueryParams traceParams = FCollisionQueryParams(FName(TEXT("FireTrace")), true, this);
+	traceParams.bTraceComplex = true;
+	traceParams.bReturnPhysicalMaterial = false;
+
+	FVector start = ProjectTileSpawnPoint->GetComponentLocation();
+	FVector end = ProjectTileSpawnPoint->GetForwardVector() * FireRange + start;
+
+	if (GetWorld()->LineTraceSingleByChannel(hitResult, start, end, ECollisionChannel::ECC_Visibility, traceParams))
+	{
+		DrawDebugLine(GetWorld(), start, hitResult.Location, FColor::Red, false, 0.5f, 0, 5);
+
+		if (hitResult.Actor.Get())
+		{
+			hitResult.Actor.Get()->Destroy();
+		}
+	}
+	else
+	{
+		DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.5f, 0, 5);
 	}
 }

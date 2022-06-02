@@ -20,6 +20,7 @@ public:
 	bool IsReadyToFire();
 	void Reload();
 	void Burst();
+	void Shoot();
 	
 	FTimerHandle ReloadTimer;
 	FTimerHandle BurstTimer;
@@ -50,4 +51,10 @@ protected:
 
 	int BurstCount = 3;
 	int CurrentBurst = 0;
+	
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire | Components")
+	TSubclassOf<class AProjectile> ProjectileClass;
+
+	void LineTrace();
 };

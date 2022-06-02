@@ -25,13 +25,16 @@ public:
 	void Fire();
 	void SpecialFire();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UStaticMeshComponent* TurretMesh;
+
+	void SetupCannon(TSubclassOf<ACannon> cannonClass);
+	ACannon* GetCurrentCannon(){ return Cannon; }
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	UStaticMeshComponent* BodyMesh;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
-	UStaticMeshComponent* TurretMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	class USpringArmComponent* SpringArm;
@@ -60,7 +63,7 @@ protected:
 	class ATankController* Controller;
 
 	// Fire
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UArrowComponent* CannonSetupPoint;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
@@ -69,7 +72,4 @@ protected:
 	UPROPERTY()
 	ACannon* Cannon;
 
-	void SetupCannon();
-	
-	
 };

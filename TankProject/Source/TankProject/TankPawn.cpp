@@ -19,19 +19,26 @@ ATankPawn::ATankPawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body Mesh"));
-	BodyMesh->SetupAttachment(RootComponent);
+	RootComponent = BodyMesh;
+
+	//BodyMesh->SetupAttachment(RootComponent);
 
 	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret Mesh"));
 	TurretMesh->SetupAttachment(BodyMesh);
 	
+	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CannonSetupPoint"));
+	CannonSetupPoint->AttachToComponent(TurretMesh, FAttachmentTransformRules::KeepRelativeTransform);
+	
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(BodyMesh);
+	SpringArm->bDoCollisionTest = false;
+	SpringArm->bInheritPitch = false;
+	SpringArm->bInheritYaw = false;
+	SpringArm->bInheritRoll = false;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
-	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CannonSetupPoint"));
-	CannonSetupPoint->AttachToComponent(TurretMesh, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void ATankPawn::MoveForward(float value)
@@ -49,7 +56,7 @@ void ATankPawn::BeginPlay()
 	Super::BeginPlay();
 
 	Controller = Cast<ATankController>(GetController());
-	SetupCannon();
+	SetupCannon(CannonClass);
 }
 
 void ATankPawn::Tick(float DeltaSeconds)
@@ -101,8 +108,13 @@ void ATankPawn::SpecialFire()
 	}
 }
 
-void ATankPawn::SetupCannon()
+void ATankPawn::SetupCannon(TSubclassOf<ACannon> cannonClass)
 {
+	if (cannonClass)
+	{
+		CannonClass = cannonClass;
+	}
+
 	if (Cannon)
 	{
 		Cannon->Destroy();
@@ -112,7 +124,7 @@ void ATankPawn::SetupCannon()
 	spawnParams.Owner = this;
 
 	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, spawnParams);
-	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 
