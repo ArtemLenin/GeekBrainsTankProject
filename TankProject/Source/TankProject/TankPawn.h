@@ -28,12 +28,13 @@ public:
 	UFUNCTION()
 	void SpecialFire();
 
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	UStaticMeshComponent* TurretMesh;
 
 	void SetupCannon(TSubclassOf<ACannon> cannonClass);
 	ACannon* GetCurrentCannon(){ return Cannon; }
+
+	TSubclassOf<ACannon> GetCannonCurrentClass(){ return CannonCurrentClass; }
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")

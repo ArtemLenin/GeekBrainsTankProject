@@ -16,9 +16,15 @@ enum class ECannonType : uint8
 	FireTrace = 1 UMETA(DisplayName = "Use trace"),
 };
 
+UENUM(BlueprintType)
+enum class EProjectileType : uint8
+{
+	Casual = 0 UMETA(DisplayName = "Casual projectile"),
+	Special = 1 UMETA(DisplayName = "Special projectile"),
+};
+
 UCLASS()
 class TANKPROJECT_API UGameStructs : public UObject
 {
 	GENERATED_BODY()
-	
 };

@@ -29,7 +29,23 @@ void AAmmoBox::OnMeshOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 	UE_LOG(LogTemp, Warning, TEXT("Projectile %s collided with %s"), *GetName(), *OtherActor->GetName());
 	if (OtherActor == playerPawn)
 	{
-		playerPawn->SetupCannon(CannonClass);
+		UE_LOG(LogTemp, Warning, TEXT("Bullets: %d"), playerPawn->GetCurrentCannon()->GetProjectilesCount());
+		if (CannonClass == playerPawn->GetCannonCurrentClass())
+		{
+			if (ProjectileType == EProjectileType::Casual)
+			{
+				playerPawn->GetCurrentCannon()->AddProjectilesCount(projectilesCount);
+			}
+			else
+			{
+				playerPawn->GetCurrentCannon()->AddSpecialProjectilesCount(projectilesCount);
+			}
+		}
+		else
+		{
+			playerPawn->SetupCannon(CannonClass);
+		}
+		UE_LOG(LogTemp, Warning, TEXT("Bullets: %d"), playerPawn->GetCurrentCannon()->GetProjectilesCount());
 	}
 	Destroy();
 }

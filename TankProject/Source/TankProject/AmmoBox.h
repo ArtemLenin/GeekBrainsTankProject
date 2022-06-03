@@ -19,13 +19,17 @@ public:
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-		class UStaticMeshComponent* Mesh;
+	class UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-		TSubclassOf<class ACannon> CannonClass;
+	TSubclassOf<class ACannon> CannonClass;
 
 	UFUNCTION()
-		void OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-		
+	void OnMeshOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire")
 	int projectilesCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fire")
+	EProjectileType ProjectileType = EProjectileType::Casual;
 };

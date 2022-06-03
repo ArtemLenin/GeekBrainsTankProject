@@ -21,6 +21,11 @@ public:
 	void Reload();
 	void Burst();
 	void Shoot();
+	int GetProjectilesCount() { return ProjectilesCount; };
+	void AddProjectilesCount(int value) { ProjectilesCount += value; };
+	
+	int GetSpecialProjectilesCount() { return SpecialProjectilesCount; };
+	void AddSpecialProjectilesCount(int value) { SpecialProjectilesCount += value; };
 	
 	FTimerHandle ReloadTimer;
 	FTimerHandle BurstTimer;
