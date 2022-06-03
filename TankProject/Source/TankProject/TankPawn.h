@@ -21,9 +21,13 @@ public:
 	void RotateRight(float value);
 	virtual void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
+	void ChangeCannon();
+
 	UFUNCTION()
 	void Fire();
+	UFUNCTION()
 	void SpecialFire();
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	UStaticMeshComponent* TurretMesh;
@@ -67,9 +71,13 @@ protected:
 	class UArrowComponent* CannonSetupPoint;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
-	TSubclassOf<ACannon> CannonClass;
+	TSubclassOf<ACannon> CannonCurrentClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
+	TSubclassOf<ACannon> CannonSecondaryClass;
 	
 	UPROPERTY()
 	ACannon* Cannon;
+
 
 };

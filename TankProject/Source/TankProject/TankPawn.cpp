@@ -56,7 +56,7 @@ void ATankPawn::BeginPlay()
 	Super::BeginPlay();
 
 	Controller = Cast<ATankController>(GetController());
-	SetupCannon(CannonClass);
+	SetupCannon(CannonCurrentClass);
 }
 
 void ATankPawn::Tick(float DeltaSeconds)
@@ -112,7 +112,7 @@ void ATankPawn::SetupCannon(TSubclassOf<ACannon> cannonClass)
 {
 	if (cannonClass)
 	{
-		CannonClass = cannonClass;
+		CannonCurrentClass = cannonClass;
 	}
 
 	if (Cannon)
@@ -123,8 +123,18 @@ void ATankPawn::SetupCannon(TSubclassOf<ACannon> cannonClass)
 	spawnParams.Instigator = this;
 	spawnParams.Owner = this;
 
-	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, spawnParams);
+	Cannon = GetWorld()->SpawnActor<ACannon>(CannonCurrentClass, spawnParams);
 	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
+void ATankPawn::ChangeCannon()
+{
+	if (Cannon)
+	{
+		TSubclassOf<ACannon> temp = CannonCurrentClass;
+		CannonCurrentClass = CannonSecondaryClass;
+		CannonSecondaryClass = temp;
 
+		SetupCannon(CannonCurrentClass);
+	}
+}
