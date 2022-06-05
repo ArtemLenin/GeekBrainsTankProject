@@ -28,3 +28,18 @@ class TANKPROJECT_API UGameStructs : public UObject
 {
 	GENERATED_BODY()
 };
+
+USTRUCT()
+struct FDamageData
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	float DamageValue;
+
+	UPROPERTY()
+	AActor* Instigator;
+
+	UPROPERTY()
+	AActor* DamageMaker; 
+};

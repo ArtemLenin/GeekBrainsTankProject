@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DamageTaker.h"
 #include "GameFramework/Pawn.h"
 #include "TankPawn.generated.h"
 
 class UStaticMeshComponent;
 class ACannon;
 UCLASS()
-class TANKPROJECT_API ATankPawn : public APawn
+class TANKPROJECT_API ATankPawn : public APawn, public IDamageTaker
 {
 	GENERATED_BODY()
 
@@ -36,6 +37,17 @@ public:
 
 	TSubclassOf<ACannon> GetCannonCurrentClass(){ return CannonCurrentClass; }
 
+	UFUNCTION()
+	void TakeDamage(FDamageData DamageData) override;
+
+	UFUNCTION()
+	void OnDie();
+
+	UFUNCTION()
+	void DamageTaked(float DamageValue);
+	
+
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	UStaticMeshComponent* BodyMesh;
@@ -47,6 +59,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	class UCameraComponent* Camera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	class UHealthComponent* HealthComponent; 
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	class UBoxComponent* BoxCollision;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement | Speed")
 	float MoveSpeed = 100.0f;
 

@@ -51,7 +51,10 @@ protected:
 
 	bool bReadyToFire = true;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire | Components")
 	int ProjectilesCount = 5;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire | Components")
 	int SpecialProjectilesCount = 3;
 
 	int BurstCount = 3;

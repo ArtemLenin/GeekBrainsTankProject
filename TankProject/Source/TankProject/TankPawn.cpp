@@ -9,6 +9,8 @@
 #include "GameFramework/Actor.h"
 #include "TankController.h"
 #include "Cannon.h"
+#include "HealthComponent.h"
+#include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -39,6 +41,14 @@ ATankPawn::ATankPawn()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
+	HealthComponent->OnDie.AddUObject(this, &ATankPawn::OnDie);
+	HealthComponent->OnHealthChange.AddUObject(this, &ATankPawn::DamageTaked);
+
+	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collision"));
+	BoxCollision->SetupAttachment(BodyMesh);
+
+	
 }
 
 void ATankPawn::MoveForward(float value)
@@ -125,6 +135,21 @@ void ATankPawn::SetupCannon(TSubclassOf<ACannon> cannonClass)
 
 	Cannon = GetWorld()->SpawnActor<ACannon>(CannonCurrentClass, spawnParams);
 	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+}
+
+void ATankPawn::TakeDamage(FDamageData DamageData)
+{
+	HealthComponent->TakeDamage(DamageData);
+}
+
+void ATankPawn::OnDie()
+{
+	Destroy();
+}
+
+void ATankPawn::DamageTaked(float DamageValue)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Tank %s taked damage: %f"), *GetName(), DamageValue);
 }
 
 void ATankPawn::ChangeCannon()
