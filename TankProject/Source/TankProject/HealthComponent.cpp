@@ -19,7 +19,7 @@ void UHealthComponent::TakeDamage(FDamageData DamageData)
 	{
 		if (OnDie.IsBound())
 		{
-			
+			ScoreUp(DamageData);
 			OnDie.Broadcast();
 		}
 	}
@@ -46,4 +46,9 @@ void UHealthComponent::AddHealth(float AddHealthValue)
 {
 	CurrentHealth += AddHealthValue;
 	if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
+}
+
+void ScoreUp(FDamageData DamageData)
+{
+	
 }

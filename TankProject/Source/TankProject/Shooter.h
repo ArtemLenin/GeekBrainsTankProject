@@ -12,15 +12,54 @@ class TANKPROJECT_API AShooter : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AShooter();
+    
+    UFUNCTION()
+	void Fire();	
 
+	TSubclassOf<ACannon> GetCannonCurrentClass(){ return CannonCurrentClass; }
+
+	UFUNCTION()
+	void TakeDamage(FDamageData DamageData) override;
+
+	UFUNCTION()
+	void OnDie();
+
+	UFUNCTION()
+	void DamageTaked(float DamageValue);
+
+	
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UStaticMeshComponent* BodyMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UStaticMeshComponent* TurretMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	class UHealthComponent* HealthComponent; 
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	class UBoxComponent* BoxCollision;
+	
+	// Fire
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UArrowComponent* CannonSetupPoint;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
+	TSubclassOf<ACannon> CannonCurrentClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret | Cannon")
+	TSubclassOf<ACannon> CannonSecondaryClass;
+	
+	UPROPERTY()
+	ACannon* Cannon;
+
+	void SetupCannon(TSubclassOf<ACannon> cannonClass);
+
+	const FString BodyMeshPath;
+	const FString TurretMeshPath;
 
 };

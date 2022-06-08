@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameStructs.h"
+#include "Scorable.h"
 #include "Components/ActorComponent.h"
 #include "Tests/AutomationTestSettings.h"
 #include "HealthComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TANKPROJECT_API UHealthComponent : public UActorComponent
+class TANKPROJECT_API UHealthComponent : public UActorComponent, public IScorable
 {
 	GENERATED_BODY()
 
@@ -29,7 +30,8 @@ public:
 	float GetHealthState() const;
 
 	void AddHealth(float AddHealthValue);
-	
+
+	void ScoreUp(FDamageData DamageData) override;
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health Value")
 	float MaxHealth = 10.0f;
