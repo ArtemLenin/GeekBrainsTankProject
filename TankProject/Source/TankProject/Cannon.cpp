@@ -2,6 +2,8 @@
 
 
 #include "Cannon.h"
+
+#include "DamageTaker.h"
 #include "Components/ArrowComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -108,9 +110,27 @@ void ACannon::LineTrace()
 	{
 		DrawDebugLine(GetWorld(), start, hitResult.Location, FColor::Red, false, 0.5f, 0, 5);
 
-		if (hitResult.Actor.Get())
+		AActor* otherActor = hitResult.Actor.Get();
+		
+		if (otherActor)
 		{
-			hitResult.Actor.Get()->Destroy();
+			UE_LOG(LogTemp, Warning, TEXT("Trace %s collided with %s"), *GetName(), *otherActor->GetName());
+			AActor* owner = GetOwner();
+			AActor* ownerByOwner = owner != nullptr? owner->GetOwner() : nullptr;
+
+			if (otherActor != owner && otherActor != ownerByOwner)
+			{
+				IDamageTaker* damageTakerActor = Cast<IDamageTaker>(otherActor);
+				if (damageTakerActor)
+				{
+					FDamageData damageData;
+					damageData.DamageValue = TraceDamage;
+					damageData.Instigator = owner;
+					damageData.DamageMaker = this;
+
+					damageTakerActor->TakeDamage(damageData);
+				}
+			}
 		}
 	}
 	else

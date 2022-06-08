@@ -115,3 +115,7 @@ void ATurret::OnDie()
 	Destroy();
 }
 
+void ATurret::ScoreUp(FDamageData DamageData)
+{
+	
+}

@@ -4,6 +4,7 @@
 #include "TankController.h"
 #include "TankPawn.h"
 #include "DrawDebugHelpers.h"
+#include "Components/ArrowComponent.h"
 
 ATankController::ATankController()
 {
@@ -37,13 +38,14 @@ void ATankController::Tick(float DeltaSeconds)
 	DeprojectMousePositionToWorld(MousePosition, mouseDirection);
 	FVector PawnPosition;
 	if(TankPawn) PawnPosition = TankPawn->GetActorLocation();
-	//FVector TurretPosition = TankPawn->TurretMesh->GetComponentLocation();
+	//if(TankPawn) PawnPosition = TankPawn->GetCannonSetupPoint()->GetComponentLocation();
 	MousePosition.Z = PawnPosition.Z;
 	FVector dir = MousePosition - PawnPosition;
 	dir.Normalize();
 
 	MousePosition = PawnPosition + dir * 1000;
 	DrawDebugLine(GetWorld(), PawnPosition, MousePosition, FColor::Green, false, 0.1f, 0, 5);
+	//DrawDebugLine(GetWorld(), PawnPosition, MousePosition, FColor::Green, false, 0.1f, 0, 5);
 }
 
 void ATankController::MoveForward(float value)

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DamageTaker.h"
+#include "Scorable.h"
 #include "GameFramework/Actor.h"
 #include "Turret.generated.h"
 
@@ -11,7 +12,7 @@ class UMeshComponent;
 class ACannon;
 
 UCLASS()
-class TANKPROJECT_API ATurret : public AActor, public IDamageTaker
+class TANKPROJECT_API ATurret : public AActor, public IDamageTaker, public IScorable
 {
 	GENERATED_BODY()
 	
@@ -26,9 +27,10 @@ public:
 
 	UFUNCTION()
 	void DamageTaked(float Damage);
-	
-	
 
+	UFUNCTION()
+	void ScoreUp(FDamageData DamageData) override;
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;

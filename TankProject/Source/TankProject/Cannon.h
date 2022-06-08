@@ -64,5 +64,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire | Components")
 	TSubclassOf<class AProjectile> ProjectileClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire | Components")
+	float TraceDamage = 0.5f;
+	
 	void LineTrace();
 };

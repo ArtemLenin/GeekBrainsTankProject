@@ -14,8 +14,6 @@
 #include "Kismet/KismetMathLibrary.h"
 
 
-
-// Sets default values
 ATankPawn::ATankPawn()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -47,8 +45,6 @@ ATankPawn::ATankPawn()
 
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collision"));
 	BoxCollision->SetupAttachment(BodyMesh);
-
-	
 }
 
 void ATankPawn::MoveForward(float value)
@@ -92,7 +88,7 @@ void ATankPawn::Tick(float DeltaSeconds)
 	if (Controller)
 	{
 		FVector mousePosition = Controller->GetMousePosition();
-		FRotator targetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), mousePosition);
+		FRotator targetRotation = UKismetMathLibrary::FindLookAtRotation(CannonSetupPoint->GetComponentLocation(), mousePosition);
 		FRotator currRotation = TurretMesh->GetComponentRotation();
 		
 		targetRotation.Pitch = currRotation.Pitch;
@@ -104,31 +100,20 @@ void ATankPawn::Tick(float DeltaSeconds)
 
 void ATankPawn::Fire()
 {
-	if (Cannon)
-	{
-		Cannon->Fire();
-	}
+	if (Cannon) Cannon->Fire();
 }
 
 void ATankPawn::SpecialFire()
 {
-	if (Cannon)
-	{
-		Cannon->SpecialFire();
-	}
+	if (Cannon) Cannon->SpecialFire();
 }
 
 void ATankPawn::SetupCannon(TSubclassOf<ACannon> cannonClass)
 {
-	if (cannonClass)
-	{
-		CannonCurrentClass = cannonClass;
-	}
+	if (cannonClass) CannonCurrentClass = cannonClass;
 
-	if (Cannon)
-	{
-		Cannon->Destroy();
-	}
+	if (Cannon) Cannon->Destroy();
+
 	FActorSpawnParameters spawnParams;
 	spawnParams.Instigator = this;
 	spawnParams.Owner = this;

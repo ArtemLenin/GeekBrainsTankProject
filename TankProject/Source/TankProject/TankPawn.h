@@ -45,7 +45,6 @@ public:
 
 	UFUNCTION()
 	void DamageTaked(float DamageValue);
-	
 
 	
 protected:
